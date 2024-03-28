@@ -11,6 +11,7 @@ $container = $builder->build();
 
 if (PHP_SAPI != 'cli') {
     require_once __DIR__.'/../config/routes.php';
+    require_once __DIR__.'/../config/middlewares.php';
     Router::setContainer($container);
     Router::run();
 }
