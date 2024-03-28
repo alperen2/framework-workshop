@@ -14,3 +14,9 @@ Router::group('/auth', function () {
 });
 
 
+Router::group('/candidate', function () {
+    Router::match('GET', '/', [CandidateController::class, 'show']);
+    Router::match('GET|POST', '/add', [CandidateController::class, 'add']);
+    Router::match('GET|POST', '/update/{id}', [CandidateController::class, 'update']);
+    Router::match('GET', '/delete/{id}', [CandidateController::class, 'delete']);
+});

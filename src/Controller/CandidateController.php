@@ -3,17 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Candidate;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 class CandidateController {
-    public function show() {
-        // $candidates = $entityManager->getRepository(Candidate::class)->findAll();
+    public function show(EntityManager $entityManager, Environment $twig) {
+        $candidates = $entityManager->getRepository(Candidate::class)->findAll();
 
-        // echo $twig->render('index.html.twig', [
-        //     'candidates' => $candidates,
-        // ]);
+        echo $twig->render('candidate/index.html.twig', [
+            'candidates' => $candidates,
+        ]);
     }
 
     public function add(EntityManager $entityManager, Request $request, Environment $twig) {
@@ -32,7 +33,7 @@ class CandidateController {
             $entityManager->persist($candidates);
             $entityManager->flush();
 
-            $redirectResponse = new RedirectResponse('/');
+            $redirectResponse = new RedirectResponse('/candidate');
             $redirectResponse->send();
         }
 
@@ -50,7 +51,7 @@ class CandidateController {
         $entityManager->remove($candidate);
         $entityManager->flush();
 
-        $redirectResponse = new RedirectResponse('/');
+        $redirectResponse = new RedirectResponse('/candidate');
         $redirectResponse->send();
     }
 
@@ -73,8 +74,8 @@ class CandidateController {
 
             $entityManager->persist($candidate);
             $entityManager->flush();
-
-            $redirectResponse = new RedirectResponse('/');
+            
+            $redirectResponse = new RedirectResponse('/candidate');
             $redirectResponse->send();
         }
 
