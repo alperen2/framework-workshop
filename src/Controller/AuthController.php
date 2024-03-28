@@ -14,29 +14,32 @@ class AuthController {
             Router::push(Router::route('index'));
         }
 
-        $params = $request->request->all();
-
-        if ($request->getMethod() === 'POST') {
+        
+        $authError = "";
+        if ($request->getMethod() == 'POST') {
+            $params = $request->request->all();
             try {
                 $userId = $auth->register($params['email'], $params['password'], $params['username']);
-            
-                echo 'We have signed up a new user with the ID ' . $userId;
+
+                $auth->loginWithUsername($params['username'], $params['password'], null);
+                Router::push(Router::route('index'));
             }
             catch (\Delight\Auth\InvalidEmailException $e) {
-                die('Invalid email address');
+                $authError = 'Invalid email address';
             }
             catch (\Delight\Auth\InvalidPasswordException $e) {
-                die('Invalid password');
+                $authError = 'Invalid password';
             }
             catch (\Delight\Auth\UserAlreadyExistsException $e) {
-                die('User already exists');
+                $authError = 'User already exists';
             }
             catch (\Delight\Auth\TooManyRequestsException $e) {
-                die('Too many requests');
             }
         }
 
-        echo $twig->render('auth/register.html.twig');
+        echo $twig->render('auth/register.html.twig', [
+            'authError' => $authError
+        ]);
 
     }
 
@@ -45,6 +48,7 @@ class AuthController {
             Router::push(Router::route('index'));
         }
 
+        $authError = "";
         if ($request->getMethod() === 'POST') {
             $params = $request->request->all();
 
@@ -58,20 +62,22 @@ class AuthController {
                 Router::push(Router::route('index'));
             }
             catch (\Delight\Auth\InvalidEmailException $e) {
-                die('Wrong email address');
+                $authError = 'Wrong email address';
             }
             catch (\Delight\Auth\InvalidPasswordException $e) {
-                die('Wrong password');
+                $authError = 'Wrong password';
             }
             catch (\Delight\Auth\EmailNotVerifiedException $e) {
-                die('Email not verified');
+                $authError = 'Email not verified';
             }
             catch (\Delight\Auth\TooManyRequestsException $e) {
-                die('Too many requests');
+                $authError = 'Too many requests';
             }
         }
 
-        echo $twig->render('auth/login.html.twig');
+        echo $twig->render('auth/login.html.twig', [
+            'authError' => $authError
+        ]);
     }
 
     public function logout(Auth $auth) {
