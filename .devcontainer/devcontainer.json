@@ -26,7 +26,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"bmewburn.vscode-intelephense"
+				"bmewburn.vscode-intelephense",
+				"cweijan.vscode-mysql-client2"
 			]	
 		}
 	}
