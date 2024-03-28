@@ -3,36 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\Candidate;
-use Delight\Auth\Auth;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 class CandidateController {
-    public function show(Environment $twig, EntityManager $em, Request $request, Auth $auth) {
-        $candidates = $em->getRepository(Candidate::class)->findAll();
+    public function show() {
+        // $candidates = $entityManager->getRepository(Candidate::class)->findAll();
 
-        echo $twig->render('index.html.twig', [
-            'candidates' => $candidates,
-        ]);
+        // echo $twig->render('index.html.twig', [
+        //     'candidates' => $candidates,
+        // ]);
     }
 
-    public function add(EntityManager $em, Request $request, Auth $auth, Environment $twig) {
+    public function add(EntityManager $entityManager, Request $request, Environment $twig) {
         if ($request->getMethod() === 'POST') {
             $params = $request->request->all();
             $name = $params['name'];
-            $email = $params['email'];
+            $entityManagerail = $params['email'];
             $phone = $params['phone'];
             
             $candidates = new Candidate();
             $candidates->setName($name);
-            $candidates->setEmail($email);
+            $candidates->setEmail($entityManagerail);
             $candidates->setPhone($phone);
 
 
-            $em->persist($candidates);
-            $em->flush();
+            $entityManager->persist($candidates);
+            $entityManager->flush();
 
             $redirectResponse = new RedirectResponse('/');
             $redirectResponse->send();
@@ -41,23 +39,23 @@ class CandidateController {
         echo $twig->render('candidate/add.html.twig');
     }
 
-    public function delete($id, EntityManager $em, Environment $twig) {
-        $candidate = $em->getRepository(Candidate::class)->findOneBy(['id' => $id]);
+    public function delete($id, EntityManager $entityManager, Environment $twig) {
+        $candidate = $entityManager->getRepository(Candidate::class)->findOneBy(['id' => $id]);
 
         if (!$candidate) {
             echo $twig->render('404.html.twig');
             exit;
         }
 
-        $em->remove($candidate);
-        $em->flush();
+        $entityManager->remove($candidate);
+        $entityManager->flush();
 
         $redirectResponse = new RedirectResponse('/');
         $redirectResponse->send();
     }
 
-    public function update($id, EntityManager $em, Request $request, Environment $twig) {
-        $candidate = $em->getRepository(Candidate::class)->findOneBy(['id' => $id]);
+    public function update($id, EntityManager $entityManager, Request $request, Environment $twig) {
+        $candidate = $entityManager->getRepository(Candidate::class)->findOneBy(['id' => $id]);
         if (!$candidate) {
             echo $twig->render('404.html.twig');
             exit;
@@ -66,15 +64,15 @@ class CandidateController {
             $params = $request->request->all();
 
             $name = $params['name'];
-            $email = $params['email'];
+            $entityManagerail = $params['email'];
             $phone = $params['phone'];
 
             $candidate->setName($name);
-            $candidate->setEmail($email);
+            $candidate->setEmail($entityManagerail);
             $candidate->setPhone($phone);
 
-            $em->persist($candidate);
-            $em->flush();
+            $entityManager->persist($candidate);
+            $entityManager->flush();
 
             $redirectResponse = new RedirectResponse('/');
             $redirectResponse->send();
