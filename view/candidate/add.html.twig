@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Aday Ekle</h2>
+    <form method="POST" action="/candidate/add">
+        <div class="mb-3">
+            <input type="text" name="name" class="form-control" id="name" placeholder="Aday ad soyad">
+        </div>
+        <div class="mb-3">
+            <input type="text" name="email" class="form-control" id="email" placeholder="Aday email adres">
+        </div>
+        <div class="mb-3">
+            <input type="text" name="phone" class="form-control" id="phone" placeholder="Aday tel">
+        </div>
+        <button type="submit" class="btn btn-primary">Ekle</button>
+    </form>
+</div>
+{% endblock %}
